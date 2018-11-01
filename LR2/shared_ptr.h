@@ -1,5 +1,4 @@
 #include <iostream>
-#include <atomic>
 using namespace std;
 
 template<typename T>
