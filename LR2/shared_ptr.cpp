@@ -1,15 +1,15 @@
 #include "shared_ptr.h"
-#include<iostream>
+#include <iostream>
 
 using namespace std;
 
 int main() //Тест
 {
-	SharedPtr<int> ptr;
-	*ptr = 2;
-	cout << ptr.use_count();
-	SharedPtr<int> ptr2(ptr);
-	cout << ptr.use_count();
-	*ptr2 = 34;
-	ptr.swap(ptr2);
+	//int *p = new int(2);
+	int p = 2;
+	SharedPtr<int> ptr1;
+	ptr1.reset(&p);
+	//SharedPtr<int> ptr2(ptr1);
+	//cout << *ptr2;
+	
 }
