@@ -1,4 +1,5 @@
 #include <iostream>
+#include <atomic>
 using namespace std;
 
 template<typename T>
@@ -7,20 +8,22 @@ class SharedPtr
 	struct control_block
 	{
 		T *ptr;
-		unsigned int count = 0;
+		atomic_uint *count;
 	};
 	control_block block;
 public:
 	SharedPtr()
 	{
 		block.ptr = nullptr;
-		block.count = 1;
+		block.count = new atomic_uint;
+		*(block.count) = 1;
 	}
 
 	SharedPtr(const SharedPtr &data)
 	{
-		this->block.ptr = data.block.ptr;
-		block.count++;
+		block.ptr = data.block.ptr;
+		block.count = data.block.count;
+		*(block.count)++;
 	}
 
 	SharedPtr &operator=(const SharedPtr &data)
@@ -50,7 +53,7 @@ public:
 	void reset() //Не забыть применить деструктор
 	{
 		block.ptr = nullptr;
-		block.count = 0;
+		block.count = nullptr;
 	}
 
 	void reset(T *data_for_add)
@@ -65,16 +68,9 @@ public:
 		swap(this->block.count, other.block.count);
 	}
 
-	SharedPtr& swap(SharedPtr &other)
-	{
-		this->block.ptr = other.block.ptr;
-		this->block.count = other.block.count;
-		return *this;
-	}
-
 	T *get()
 	{
-		if (block.count != 0)
+		if (*(block.count))
 		{
 			return block.ptr;
 		}
@@ -82,25 +78,24 @@ public:
 
 	unsigned int use_count()
 	{
-		return block.count;
+		return *(block.count);
 	}
 
 	operator bool()
 	{
-		return block.count != 0;
+		return *block.count != 0;
 	}
 
 	~SharedPtr()
 	{
-		if (block.count > 1)
+		if (*(block.count) > 1) 
 		{
-			block.count--;
+			*(block.count)--;
 		}
-
 		else
 		{
 			block.ptr = nullptr;
-			block.count = 0;
+			delete block.count;
 		}
 	}
 };
