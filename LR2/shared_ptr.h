@@ -2,100 +2,143 @@
 #include <atomic>
 using namespace std;
 
-template<typename T>
+struct Control_block
+{
+	atomic_uint counter;
+	Control_block()
+	{
+		counter = 0;
+	}
+
+	void add()
+	{
+		counter++;
+	}
+
+	void del()
+	{
+		counter--;
+	}
+
+	bool is_empty()
+	{
+		return counter == 1;
+	}
+
+	int value_counter()
+	{
+		return counter;
+	}
+};
+
+template <typename T>
 class SharedPtr
 {
-	struct control_block
-	{
-		T *ptr;
-		atomic_uint *count;
-	};
-	control_block block;
+	T *ptr;
+	Control_block *control_block;
 public:
 	SharedPtr()
 	{
-		block.ptr = nullptr;
-		block.count = new atomic_uint;
-		*(block.count) = 1;
+		ptr = nullptr;
+		control_block = nullptr;
 	}
 
-	SharedPtr(const SharedPtr &data)
+	T* get()
 	{
-		block.ptr = data.block.ptr;
-		block.count = data.block.count;
-		*(block.count)++;
+		if (ptr == nullptr)
+		{
+			return 0;
+		}
+
+		else
+		{
+			return ptr;
+		}
+	}
+	SharedPtr(SharedPtr & shared_ptr)
+	{
+		ptr = shared_ptr.get();
+		control_block = shared_ptr.control_block;
+		control_block->add();
 	}
 
-	SharedPtr &operator=(const SharedPtr &data)
+	SharedPtr(T value)
 	{
-		if (block.ptr != data.block.ptr)
-		{
-			block.ptr = data.block.ptr;
-		}
+		ptr = new T(value);
+		control_block = new Control_block;
+		control_block->add();
+	}
 
-		if (block.count != data.block.count)
-		{
-			block.count = data.block.count;
-		}
+	SharedPtr & operator = (const SharedPtr & shared_ptr)
+	{
+		ptr = shared_ptr.get();
+		control_block = shared_ptr.control_block;
+		control_block->add();
 		return *this;
+	}
+
+	void reset()
+	{
+		if (control_block->is_empty())
+		{
+			delete ptr;
+			delete control_block;
+		}
+
+		else
+		{
+			ptr = nullptr;
+			control_block = nullptr;
+		}
+	}
+
+	void reset(T *data)
+	{
+		ptr = data;
+		control_block = new Control_block;
+		control_block->add();
+	}
+
+	void swap(SharedPtr &shared_ptr)
+	{
+		std::swap(ptr, shared_ptr.ptr);
+		std::swap(control_block, shared_ptr.control_block);
 	}
 
 	T& operator*()
 	{
-		return *(block.ptr);
+		return *ptr;
 	}
 
-	T* operator->()
+	T* operator ->()
 	{
-		return block.ptr;
+		return ptr;
 	}
 
-	void reset() //Не забыть применить деструктор
+	size_t use_count()
 	{
-		block.ptr = nullptr;
-		block.count = nullptr;
-	}
-
-	void reset(T *data_for_add)
-	{
-		reset();
-		block.ptr = data_for_add;
-	}
-
-	void swap(SharedPtr &other)
-	{
-		swap(this->block.ptr, other.block.ptr);
-		swap(this->block.count, other.block.count);
-	}
-
-	T *get()
-	{
-		if (*(block.count))
-		{
-			return block.ptr;
-		}
-	}
-
-	unsigned int use_count()
-	{
-		return *(block.count);
+		return control_block->value_counter();
 	}
 
 	operator bool()
 	{
-		return *block.count != 0;
+		return ptr != nullptr;
 	}
 
 	~SharedPtr()
 	{
-		if (*(block.count) > 1) 
+		if (control_block != nullptr)
 		{
-			*(block.count)--;
-		}
-		else
-		{
-			block.ptr = nullptr;
-			delete block.count;
+			if (!control_block->is_empty())
+			{
+				control_block->del();
+			}
+
+			else
+			{
+				delete ptr;
+				delete control_block;
+			}
 		}
 	}
 };
