@@ -28,7 +28,7 @@ public:
 	node* successor(node *);
 	void delfix(node *);
 	void disp();
-	void display(node *);
+	void display(node *, int space);
 	void search();
 };
 void RBtree::insert()
@@ -244,7 +244,7 @@ void RBtree::delfix(node *p)
 			{
 				if (s->right->color == 'b')
 				{
-					s->left->color == 'b';
+					s->left->color = 'b';
 					s->color = 'r';
 					rightrotate(s);
 					s = p->parent->right;
@@ -371,9 +371,9 @@ node* RBtree::successor(node *p)
 
 void RBtree::disp()
 {
-	display(root);
+	display(root, 0);
 }
-void RBtree::display(node *p)
+void RBtree::display(node *p, int space)
 {
 	if (root == NULL)
 	{
@@ -382,40 +382,18 @@ void RBtree::display(node *p)
 	}
 	if (p != NULL)
 	{
-		cout << "\n\t NODE: ";
-		cout << "\n Key: " << p->key;
-		cout << "\n Colour: ";
-		if (p->color == 'b')
-			cout << "Black";
-		else
-			cout << "Red";
-		if (p->parent != NULL)
-			cout << "\n Parent: " << p->parent->key;
-		else
-			cout << "\n There is no parent of the node.  ";
-		if (p->right != NULL)
-			cout << "\n Right Child: " << p->right->key;
-		else
-			cout << "\n There is no right child of the node.  ";
-		if (p->left != NULL)
-			cout << "\n Left Child: " << p->left->key;
-		else
-			cout << "\n There is no left child of the node.  ";
+		int count = 1;
+		space += count;
+		display(p->right, space);
 		cout << endl;
-		if (p->left)
+
+		for (int i = count; i < space; i++)
 		{
-			cout << "\n\nLeft:\n";
-			display(p->left);
+			cout << "	";
 		}
-		/*else
-		 cout<<"\nNo Left Child.\n";*/
-		if (p->right)
-		{
-			cout << "\n\nRight:\n";
-			display(p->right);
-		}
-		/*else
-		 cout<<"\nNo Right Child.\n"*/
+
+		cout << "--" << p->key << "(" << p->color << ")" << endl;
+		display(p->left, space);
 	}
 }
 void RBtree::search()
@@ -469,6 +447,7 @@ void RBtree::search()
 
 	}
 }
+
 int main()
 {
 	int ch, y = 0;
