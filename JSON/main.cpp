@@ -1,6 +1,8 @@
-#include "json.h"
+#include "json.hpp"
 
-int main()
+namespace {
+
+	const char * const json_data = R"(
 {
     "lastname" : "Ivanov",
     "firstname" : "Ivan",
@@ -13,4 +15,5 @@ int main()
     	"city" : "Moscow",
         "street" : "Vozdvijenka"
     }
-}
+})";
+};
