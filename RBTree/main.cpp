@@ -30,6 +30,8 @@ public:
 	void disp();
 	void display(node *, int space);
 	void search();
+	ostream & display_for_operator(node *p, int space, ostream &os);
+	friend ostream & operator<<(ostream &os, RBtree & tree);
 };
 void RBtree::insert()
 {
@@ -396,6 +398,7 @@ void RBtree::display(node *p, int space)
 		display(p->left, space);
 	}
 }
+
 void RBtree::search()
 {
 	if (root == NULL)
@@ -448,6 +451,35 @@ void RBtree::search()
 	}
 }
 
+ostream & RBtree::display_for_operator(node *p, int space, ostream &os)
+{
+	if (root == NULL)
+	{
+		os << "\nEmpty Tree.";
+	}
+	if (p != NULL)
+	{
+		int count = 1;
+		space += count;
+		display_for_operator(p->right, space, os);
+		os << endl;
+
+		for (int i = count; i < space; i++)
+		{
+			os << "	";
+		}
+
+		os << "--" << p->key << "(" << p->color << ")" << endl;
+		display_for_operator(p->left, space, os);
+	}
+	return os;
+}
+
+ostream & operator<<(ostream &os, RBtree & tree)
+{
+	return tree.display_for_operator(tree.root, 0, os);
+}
+
 int main()
 {
 	int ch, y = 0;
@@ -459,7 +491,8 @@ int main()
 		cout << "\n 2. Delete a node from the tree";
 		cout << "\n 3. Search for an element in the tree";
 		cout << "\n 4. Display the tree ";
-		cout << "\n 5. Exit ";
+		cout << "\n 5. Display the tree by << operator";
+		cout << "\n 6. Exit ";
 		cout << "\nEnter Your Choice: ";
 		cin >> ch;
 		switch (ch)
@@ -473,12 +506,14 @@ int main()
 			break;
 		case 4: obj.disp();
 			break;
-		case 5: y = 1;
+		case 5: cout << obj;
+			break;
+		case 6: y = 1;
 			break;
 		default: cout << "\nEnter a Valid Choice.";
 		}
 		cout << endl;
 
 	} while (y != 1);
-	return 1;
+	return 0;
 }
