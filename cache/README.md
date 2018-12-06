@@ -13,6 +13,7 @@
 | №11           | 16384         | 50622         | 53762         | 1692395       |
 | №12           | 32768         | 101006        | 107633        | 3993760       |
 | №13           | 65536         | 202556        | 215011        | 8859150       | 
+
 [direct](http://htmlpreview.github.io/?https://github.com/MikhailSayapin/LR/blob/master/cache/direct.html),
 [reverse](http://htmlpreview.github.io/?https://github.com/MikhailSayapin/LR/blob/master/cache/reverce.html),
 [random](http://htmlpreview.github.io/?https://github.com/dunaevaa/cache/blob/master/random.html)
