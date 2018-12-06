@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<body>
+<canvas id="myChart" width:100% height:100% ></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+       labels: [16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768,65536],
+        datasets: [{
+            label: 'Random',	
+	    fill: false ,
+            data: [{x: 16,y: 19}, {x: 32,y: 38}, {x: 64,y: 105}, {x: 128,y: 238}, {x: 256,y: 497}, {x: 512,y: 1254}, {x: 1024,y: 3246}, {x: 2048,y: 12104},
+	    {x: 4096,y: 61712}, {x: 8192,y: 507314}, {x: 16384,y: 1692395},{x: 32768,y: 3993760}, {x: 65536,y: 8859150}],
+            backgroundColor: [
+                'rgba(24, 222, 196, 1)'
+            ],
+            borderColor: [
+                'rgba(24, 222, 196, 1)'
+            ],
+            borderWidth: 3
+        }]
+    },
+    options: {
+	responsive: true,
+	tooltips: {
+            mode: 'point'
+        },
+	layout: {
+            padding: {
+                left: 50,
+                right: 50,
+                top: 50,
+                bottom: 50
+            }
+	},
+	elements: {
+        line: {
+                tension: 0, // disables bezier curves
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>
