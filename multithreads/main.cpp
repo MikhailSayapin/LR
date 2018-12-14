@@ -4,6 +4,7 @@
 #include "picosha256.h" 
 #include <vector>
 #include <stdlib.h>
+#include <fstream>
 //picosha2::hash256_hex_string(src)
 using namespace std;
 
@@ -23,10 +24,18 @@ std::string random_string(size_t length)
 	return str;
 }
 
+ofstream fout;
+
 void run()
 {
 	string curr_str;
 	string hash;
+	fout.open("log.txt");
+	if (!fout.is_open())
+	{
+		cout << "Ошибка открытия файла" << endl;
+		return;
+	}
 	while (true)
 	{
 		curr_str = random_string(6);
@@ -36,20 +45,25 @@ void run()
 			cout << "Пара найдена!" << endl;
 			cout << curr_str << "\t" << hash << endl;
 			cout << endl;
+
+			fout << "Пара найдена!\n";
+			fout << curr_str << "\t" << hash << "\n";
+			fout << "\n";
 		}
 	}
+	fout.close();
 }
 
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	int N;
-	cout << "Введите кол-во потоков N: ";
-	cin >> N;
-	thread beg(run);
-	vector<thread> v;
-	for (int i = 0; i < N; i++)
-	{
-		v[i] = beg;
-	}
+	cout << "Количество потоков: " << std::thread::hardware_concurrency() << endl;
+	thread t1(run);
+	thread t2(run);
+	thread t3(run);
+	thread t4(run);
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
 }
