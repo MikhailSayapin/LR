@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		dirpath = "./";
+		dirpath = "D:\\Projects\\lab-05-boost-filesystem-master\\misc\\ftp";
 	}
 	dirObxod(dirpath, dirpath.length() + 1);
 	for (const auto &x : report)
