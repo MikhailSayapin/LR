@@ -4,13 +4,12 @@
 
 using namespace boost::filesystem;
 
-std::map<std::string, std::map<int, std::pair<int, int> > > report; //<kolichestvo failov, posledniy den'> 
+std::map<std::string, std::map<int, std::pair<int, int> > > report;
 
 void dirObxod(std::string path, size_t substr_skip)
 {
 	for (const directory_entry &x : directory_iterator(path))
 	{
-		//std::cout << x.path() << std::endl;
 		if (boost::filesystem::is_directory(x.path()))
 			dirObxod(x.path().string(), substr_skip);
 		else
