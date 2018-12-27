@@ -26,7 +26,6 @@ void dirObxod(std::string path, size_t substr_skip)
 				n2 = std::stoi(fileName.substr(17, 8));
 				if (fileName.substr(25) != ".txt")
 					continue;
-				//std::cout << x << ' ' << n << std::endl;
 				std::cout << path.substr(substr_skip) << ' ' << fileName << std::endl;
 				std::string broker = path.substr(substr_skip);
 				report[broker][n1].first++;
