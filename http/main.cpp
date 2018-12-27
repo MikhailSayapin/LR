@@ -186,13 +186,10 @@ int main(int /*argc*/, char** /*argv*/)
 		auto const port = static_cast<unsigned short>(std::atoi(port_arg.c_str()));
 
 		HelloWorld server(address, port);
-		server.AddStopSignal(SIGINT);
-		server.AddStopSignal(SIGTERM);
 		server.Start();
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
-		return EXIT_FAILURE;
 	}
 	return 0;
 }
