@@ -4,7 +4,7 @@
 
 using namespace boost::filesystem;
 
-std::map<std::string, std::map<int, std::pair<int, int> > > report; //<Брокер, аккаунт<kolichestvo failov, posledniy den'>> 
+std::map<std::string, std::map<int, std::pair<int, int> > > report; //<Брокер, аккаунт<количество файлов, последний день>> 
 
 void dirObxod(std::string path, size_t substr_skip)
 {
