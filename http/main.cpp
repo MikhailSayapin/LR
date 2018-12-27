@@ -15,10 +15,10 @@
 using tcp = boost::asio::ip::tcp;     // from <boost/asio/ip/tcp.hpp>
 namespace http = boost::beast::http;  // from <boost/beast/http.hpp>
 
-struct FrindlyUserServer
+struct UserServer
 {
 public:
-	FrindlyUserServer(boost::asio::ip::address address, unsigned short port)
+	UserServer(boost::asio::ip::address address, unsigned short port)
 		: ioc{ 1 }, acceptor{ ioc, {address, port} }, signals(ioc) {
 		signals.async_wait(
 			[this](boost::system::error_code const&, int) { this->ioc.stop(); });
@@ -47,12 +47,6 @@ private:
 	tcp::acceptor acceptor; //Логика для принятия запросов
 	boost::asio::signal_set signals; //Набор сигналов, при которых сервер завершает свою работу
 };
-
-struct SimpleServer : public FrindlyUserServer
-{
-	SimpleServer(boost::asio::ip::address address, unsigned short port)
-		: FrindlyUserServer(address, port)
-	{ }
 
 protected:
 	void DoSession(tcp::socket& socket) override //Сокет - интерфейс для обеспечения обмена данными
@@ -130,12 +124,6 @@ private:
 	}
 };
 
-struct HelloWorld : public SimpleServer
-{
-	HelloWorld(boost::asio::ip::address address, unsigned short port)
-		: SimpleServer(address, port)
-	{ }
-
 protected:
 	http::response<http::string_body> HandleRequest(
 		http::request<http::string_body>&& req) override
@@ -185,7 +173,7 @@ int main(int /*argc*/, char** /*argv*/)
 		auto const port_arg = getOSEnv("PORT", "5000");
 		auto const port = static_cast<unsigned short>(std::atoi(port_arg.c_str()));
 
-		HelloWorld server(address, port);
+		UserServer server(address, port);
 		server.Start();
 	}
 	catch (const std::exception& e) {
