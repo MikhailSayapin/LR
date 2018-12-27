@@ -36,7 +36,7 @@ bool Cache::run()
         int t = 0;
 
 
-        
+        //прямой обход
         auto timer_on = std::chrono::high_resolution_clock::now();
         for(unsigned int i=0; i < 1000 ;++i)
         {
@@ -66,7 +66,7 @@ bool Cache::run()
         t=0;
         
         
-      
+      //обратный
         timer_on = std::chrono::high_resolution_clock::now();
         for(unsigned int i=0; i < 1000 ;++i){
             for(unsigned int j = 0; j < capacity ;++j)
@@ -106,7 +106,7 @@ bool Cache::run()
         }
         
         
-   
+   //случайный
         timer_on = std::chrono::high_resolution_clock::now();
         for(unsigned int i=0; i < 1000 ;++i)
         {
