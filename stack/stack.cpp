@@ -15,6 +15,4 @@ int main()
 	cout << st->head() << endl;
 	st->pop();
 	cout << st->head() << endl;
-	system("pause");
-	return 0;
 }
